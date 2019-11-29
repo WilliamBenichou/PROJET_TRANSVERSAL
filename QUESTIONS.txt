@@ -1,1 +1,5 @@
+Réseau: Une/Plusieurs VM pour chaque zone grise ?    -> OUI
+
+Java: Simulateur automatique ?
+
 
