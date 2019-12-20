@@ -38,9 +38,15 @@ if len(sys.argv) > 1:
         SERIALPORT = "/dev/" + sys.argv[1]
 else:
         SERIALPORT = "/dev/ttyS5"
-#initUART()
-
-
-r = rq.post("http://localhost:3000/fireInformation", json={"x": 0,"y":0,"i":0})
-print(r.text)
+initUART()
+print("OK")
+while(True):
+        sleep(1)
+        print("coucou")
+        sio.flush() # it is buffering. required to get the data out *now*
+        text = sio.readline()
+        print(text)
+        if(text):
+                r = rq.post("http://localhost:3000/fireInformation", text)
+                print(r.text)
 
