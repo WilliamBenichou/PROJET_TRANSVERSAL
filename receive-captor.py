@@ -41,12 +41,12 @@ else:
 initUART()
 print("OK")
 while(True):
-        sleep(1)
-        print("coucou")
-        sio.flush() # it is buffering. required to get the data out *now*
-        text = sio.readline()
+        time.sleep(1)
+        #sio.flush() # it is buffering. required to get the data out *now*
+        text = ser.readline()
         print(text)
         if(text):
-                r = rq.post("http://localhost:3000/fireInformation", text)
+                headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+                r = rq.post("http://localhost:3001/fireInformation", text,headers=headers)
                 print(r.text)
 
