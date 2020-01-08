@@ -2,8 +2,11 @@ from urllib import request
 import sys
 import serial
 import requests as rq
-import time, io, json
+import time, io, json,datetime
 import multiprocessing as mp
+import paho.mqtt.client as mqtt
+
+from influxdb import InfluxDBClient
 
 # send serial message 
 # Don't forget to establish the right serial port ******** ATTENTION
@@ -21,16 +24,25 @@ if len(sys.argv) > 1:
 else:
         SERIALPORT = "/dev/ttyS5"
 ser=serial.Serial(SERIALPORT, 9600)
-        
+
+client = mqtt.Client()
+client.connect("localhost",1883,60)
 print("OK")
 
 def send_server(queue):
         while True:
                 val = queue.get()
                 print(val)
-                headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-                r = rq.post("http://localhost:3001/fireInformation", val,headers=headers)
-                print(r.text)
+                try:
+                        d = json.loads(val)
+                        
+                        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+                        r = rq.post("http://localhost:3001/fireInformation", val,headers=headers)
+                        client.publish("topic/test", val)
+                        print(r.text)
+                except:
+                        print("nok")
+
 
 queue = mp.Queue()
 p = mp.Process(target=send_server,args=(queue,))
