@@ -15,10 +15,13 @@ def on_message(client, userdata, msg):
     j= json.loads(msg.payload.decode())
     bd_body = [
         {
-            "measurement": "fire",
+            "measurement": "firetesttag",
             "time": receiveTime,
             "fields": {
                 "value": j['i'],
+                
+            },
+            "tags":{
                 "sensor":j['id']
             }
         }
